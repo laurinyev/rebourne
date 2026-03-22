@@ -5,6 +5,6 @@ A wannabe-bash-compatible shell!
 This works on:
 * [X] Linux(last tested: all the time lul)
 * [X] Android(last tested: 2026. march 17)
-* [ ] FreeBSD
+* [X] FreeBSD(last tested: 2026. march 22; commit `57c501b39940a6744b7e9820f6689aa4e7eb1426`)
 * [ ] NetBSD
-* [X] SafaOS(last tested: 2026. march 21; commit `b870172c16ae7d7e731159ff38aa5842a6f975e7`)
+* [X] SafaOS(last tested: 2026. march 21)
