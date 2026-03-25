@@ -35,7 +35,7 @@ fn interp_ast<'a>(node: &AstNode, is_nested: bool) -> (i32, String){
                 return first;
             }
         },
-        AstNode::Command(cmd,args) => {
+        AstNode::Command(cmd,args, backgrouned) => {
             let cmd_resolved = interp_ast(cmd, true).1;
 
             match cmd_resolved.as_str() {
@@ -92,19 +92,26 @@ fn interp_ast<'a>(node: &AstNode, is_nested: bool) -> (i32, String){
                         child.stderr(Stdio::inherit());
                     }
 
-                    let out = child.output(); 
-                    if is_nested || cfg!(test) {
-                        match out {
-                            Ok(o) => match String::from_utf8(o.stdout) {
-                                    Ok(s) => (o.status.code().unwrap_or(1),s),
-                                    Err(_) => (1,"".to_string()),
-                            },
-                            Err(_) => (1,"".to_string()), 
-                        }
+                    if *backgrouned {
+                        return match child.spawn() {
+                            Ok(_) => (0,"".to_string()),
+                            Err(_) => (1,"".to_string())
+                        };
                     } else {
-                        match out {
-                            Ok(o) => (o.status.code().unwrap_or(1), "".to_string()),
-                            Err(_) => (1, "".to_string()),
+                        let out = child.output(); 
+                        if is_nested || cfg!(test) {
+                            match out {
+                                Ok(o) => match String::from_utf8(o.stdout) {
+                                        Ok(s) => (o.status.code().unwrap_or(1),s),
+                                        Err(_) => (1,"".to_string()),
+                                },
+                                Err(_) => (1,"".to_string()), 
+                            }
+                        } else {
+                            match out {
+                                Ok(o) => (o.status.code().unwrap_or(1), "".to_string()),
+                                Err(_) => (1, "".to_string()),
+                            }
                         }
                     }
                 }

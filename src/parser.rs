@@ -14,7 +14,7 @@ enum LexToken {
 pub enum AstNode {
     Sequence(Vec<AstNode>),
     ConstantString(String),
-    Command(Box<AstNode>,Vec<AstNode>),
+    Command(Box<AstNode>,Vec<AstNode>,bool),
     And(Box<AstNode>,Box<AstNode>),
     Or(Box<AstNode>,Box<AstNode>),
     EnvVarSet(Box<AstNode>,Box<AstNode>),
@@ -216,7 +216,8 @@ fn parse_expr(peeker: &mut Peeker) -> AstNode{
 
 fn parse_command (peeker: &mut Peeker) -> AstNode {
     let command = parse_expr(peeker);
-    
+    let mut backgrounded = false;
+
     if command == AstNode::ParseEnd {
         return AstNode::ParseEnd;
     }
@@ -234,6 +235,11 @@ fn parse_command (peeker: &mut Peeker) -> AstNode {
     let mut args: Vec<AstNode> = vec![];
 
     loop {
+        if peeker.peek(0) == LexToken::Bg {
+            backgrounded = true;
+            break;
+        }
+
         let expr = parse_expr(peeker);
 
         if expr == AstNode::ParseEnd {
@@ -243,7 +249,7 @@ fn parse_command (peeker: &mut Peeker) -> AstNode {
         args.push(expr);
     };
 
-    AstNode::Command(Box::new(command), args)
+    AstNode::Command(Box::new(command), args, backgrounded)
 }
 
 fn parse_command_expr (peeker: &mut Peeker) -> AstNode{
