@@ -8,4 +8,4 @@ edition = "2024"
 [features]
 safaos = []
 debug_parser = []
-debug_interp= []
+debug_lexer = []
