@@ -11,6 +11,21 @@ enum PS1ParseMode {
    Escape
 }
 
+fn get_curr_dir() -> String {
+    let dir = current_dir()
+                .expect("Failed to get current directory")
+                .to_str()
+                .expect("Failed to convert current directory to string")
+                .to_string();
+    
+    match home_dir() {
+        Some(v) => {
+            dir.replace(v.to_str().expect("Couldn't convert home directory to string"), "~")
+        },
+        None => dir
+    }
+}
+
 fn process_prompt(raw: &str) -> String{
     let mut buffer = String::new();
     let mut parse_mode = PS1ParseMode::Normal;
@@ -27,7 +42,7 @@ fn process_prompt(raw: &str) -> String{
             },
             PS1ParseMode::Escape => {
                 match c {
-                   'w' => buffer.push_str(current_dir().expect("Failed to get current directory").to_str().expect("Failed to get current directory")), 
+                   'w' => buffer.push_str(&get_curr_dir()), 
                     _ => buffer.push(c)
                 }
                 parse_mode = PS1ParseMode::Normal;
