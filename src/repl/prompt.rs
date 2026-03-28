@@ -2,6 +2,7 @@ use {
     std::{
         env::*, 
     },
+    super::userstuff::*
 };
 
 enum PS1ParseMode {
@@ -48,6 +49,35 @@ fn get_version_string(patchlevel: bool) -> String {
     }
 }
 
+fn get_hname_up_to_first_dot() -> String {
+    let hname = get_hname();
+    
+    match hname.split('.').nth(0) {
+        Some(v) => v.to_string(),
+        None => hname
+    }
+}
+
+// STUB
+fn get_history_num() -> String {
+    "1".to_string()
+}
+
+// STUB 
+fn get_command_num() -> String {
+    "1".to_string()
+}
+
+fn get_privilege_symbol() -> char {
+    let uid = get_uid();
+
+    if uid == 0 {
+        return '#'
+    } else {
+        return '$'
+    }
+}
+
 pub fn process(raw: &str) -> String{
     let mut buffer = String::new();
     let mut parse_mode = PS1ParseMode::Normal;
@@ -68,6 +98,12 @@ pub fn process(raw: &str) -> String{
                    'W' => buffer.push_str(&get_curr_dir_basename()), 
                    'v' => buffer.push_str(&get_version_string(false)), 
                    'V' => buffer.push_str(&get_version_string(true)), 
+                   'u' => buffer.push_str(&get_uname()), 
+                   'h' => buffer.push_str(&get_hname_up_to_first_dot()), 
+                   'H' => buffer.push_str(&get_hname()), 
+                   '!' => buffer.push_str(&get_history_num()), 
+                   '#' => buffer.push_str(&get_command_num()), 
+                   '$' => buffer.push(get_privilege_symbol()), 
                     _ => buffer.push(c)
                 }
                 parse_mode = PS1ParseMode::Normal;

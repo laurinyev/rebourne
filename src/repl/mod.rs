@@ -6,6 +6,7 @@ use {
 };
 
 mod prompt;
+mod userstuff;
 
 fn print_prompt() {
    match var("PS1") {
@@ -13,7 +14,9 @@ fn print_prompt() {
             print!("{}",prompt::process(&v));
         },
         Err(..) => {
-            print!("{}",prompt::process("\\w> "));
+            let default_ps1 = option_env!("RB_DEFAULT_PS1").unwrap_or("[\\u@\\h \\W]\\$ ");
+            unsafe { set_var("PS1",default_ps1) };
+            print!("{}",prompt::process(default_ps1));
         }
     } 
     stdout().flush().unwrap();

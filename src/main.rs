@@ -26,7 +26,7 @@ fn main() {
             resolver::set_path(&v)
         },
         Err(..) => {
-            let default_path: &str = option_env!("REBOURNE_DEFAULT_PATH").unwrap_or("/usr/bin:/usr/local/bin:/usr/local/sbin");
+            let default_path = option_env!("RB_DEFAULT_PATH").unwrap_or("/usr/bin:/usr/local/bin:/usr/local/sbin");
             unsafe { set_var("PATH",default_path) };
             resolver::set_path(default_path)
         }
