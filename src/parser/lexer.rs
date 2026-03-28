@@ -100,10 +100,6 @@ pub fn lex<'a>(cmd: &'a str) -> Vec<LexToken> {
                     '\'' =>{
                         lexer_mode = LexerMode::Normal;
                     },
-                    '\\' => {
-                        lexer_mode = LexerMode::Escape;
-                        last_mode = LexerMode::Qoute;
-                    },
                     _ => {
                        word_buffer.push(c);
                     }
