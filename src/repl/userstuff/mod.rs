@@ -6,7 +6,8 @@ mod unix;
 pub use unix::*;
 
 #[cfg(not(any(feature = "safaos", unix)))]
-compile_warning!("Unsupported platform, features requiring user identification won't work!");
+#[deprecated(note = "Unsupported platform, features requiring user identification won't work!")]
+const _PLATFORM_WARNING: () = ();
 
 #[cfg(not(unix))]
 mod stubs;
