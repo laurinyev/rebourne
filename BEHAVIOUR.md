@@ -6,9 +6,16 @@ The purpuse of this document is to indicate the intented behaviour of the shell 
 If invoked without an argument, Rebourne goes to REPL mode. As the name implies, REPL mode is a Read Evaluate Print Loop.
 
 In REPL mode, the following events are repeated:
-1. The prompt gets printed
+1. The prompt(env variable `PS1`) gets printed
 2. The shell listens for user input
 3. The entered string gets interpreted as a command
+
+### prompt escape sequences
+The prompt has some extra escape sequences:
+* `w` -> the current working directory
+* `W` -> the basename of the current working directory
+* `v` -> the version of the shell ("maj.min")
+* `V` -> the version of the shell ("maj.min.patch")
 
 ## Script execution
 If invoked with the first argument being a path to a file, the whole contents of the file are executed as if it was a single command.
@@ -28,7 +35,7 @@ AND(&&) and OR(||) are command expressions that conditionally execute the comman
 If any character (outside of Qoutes and DQoutes) is preceeded by a backslash(`\`), it gets into the word as-is, not as an operator.
 
 ### Qoutes and DQoutes
-All characters (except for backslash) are treated literally between qoutes(`'`) and double qoutes(`"`).
+All characters are treated literally between qoutes(`'`) and double qoutes(`"`) do the same except with the option for escape with backslash(`\`).
 
 #### Qouted escaping
 Inside qoutes, escape sequences(backslash + single character) turn into an untypable character:
