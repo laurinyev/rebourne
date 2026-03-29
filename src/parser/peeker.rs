@@ -1,26 +1,24 @@
 use super::*;
 
 pub struct Peeker {
-    tokens: Vec<LexToken>
+    tokens: Vec<LexToken>,
+    pos: usize
 }
 
 impl Peeker {
     pub fn new(tokens: Vec<LexToken>) -> Self {
-        Self { tokens }
+        Self { tokens, pos: 0 }
     }
 
     pub fn peek(&self,i: usize) -> LexToken {
-        if i >= self.tokens.len() {
-            return LexToken::EOF;
-        }
-        self.tokens[i].clone()
+        self.tokens.get(self.pos + i).cloned().unwrap_or(LexToken::EOF) 
     }
     
     pub fn consume(&mut self) -> LexToken {
-        if 1 > self.tokens.len() {
-            return LexToken::EOF;
+        let tok = self.peek(0);
+        if self.pos < self.tokens.len() {
+            self.pos += 1;
         }
-        self.tokens.remove(0)
+        tok
     }
-
 }

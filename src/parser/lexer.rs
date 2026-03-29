@@ -121,7 +121,7 @@ pub fn lex<'a>(cmd: &'a str) -> Vec<LexToken> {
             },
             LexerMode::Escape => {
                 if last_mode == LexerMode::Normal ||
-                        (last_mode == LexerMode::Qoute && c == '\'') ||
+                        (last_mode == LexerMode::Qoute  && c == '\'') || 
                         (last_mode == LexerMode::DQoute && c == '"') {
                     word_buffer.push(c);
                 } else {
