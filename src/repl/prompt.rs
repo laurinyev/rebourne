@@ -58,16 +58,6 @@ fn get_hname_up_to_first_dot() -> String {
     }
 }
 
-// STUB
-fn get_history_num() -> String {
-    "1".to_string()
-}
-
-// STUB 
-fn get_command_num() -> String {
-    "1".to_string()
-}
-
 fn get_privilege_symbol() -> char {
     let uid = get_uid();
 
@@ -78,7 +68,7 @@ fn get_privilege_symbol() -> char {
     }
 }
 
-pub fn process(raw: &str) -> String{
+pub fn process(raw: &str, repl_state: &mut super::ReplState) -> String{
     let mut buffer = String::new();
     let mut parse_mode = PS1ParseMode::Normal;
 
@@ -101,8 +91,8 @@ pub fn process(raw: &str) -> String{
                    'u' => buffer.push_str(&get_uname()), 
                    'h' => buffer.push_str(&get_hname_up_to_first_dot()), 
                    'H' => buffer.push_str(&get_hname()), 
-                   '!' => buffer.push_str(&get_history_num()), 
-                   '#' => buffer.push_str(&get_command_num()), 
+                   '!' => buffer.push_str(&format!("{}",repl_state.history_num)), 
+                   '#' => buffer.push_str(&format!("{}",repl_state.command_num)), 
                    '$' => buffer.push(get_privilege_symbol()), 
                     _ => buffer.push(c)
                 }
