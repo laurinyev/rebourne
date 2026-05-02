@@ -1,3 +1,5 @@
+# MOVED TO CODEBERG
+https://codeberg.org/roids/rebourne
 # Rebourne
 A wannabe-bash-compatible shell!
 
